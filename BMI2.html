@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manual :BMI Calculator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: rgb(209, 82, 131);
+        }
+
+        fieldset {
+            width: 50%;
+            background-color: white;
+        }
+
+        legend {
+            font-weight: bold;
+        }
+
+        span.error {
+            /* Add a style here for your error messages */
+			color: red;
+			font-size: small;
+        }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+    <script>
+        $(function() {
+            $("form").submit(runMyProgram);
+        });
+
+        function runMyProgram() {
+            // Clear out any existing errors from previous attempts
+            $(".error").html("");
+
+			/*
+				WEIGHT VALIDATION
+			*/
+
+            // Declare a boolean flag to track whether or not the form,
+			// is filled out correctly
+			var isValid = true;
+
+			// Get the first name from the text box with ID firstName
+			var weight = $("#weight").val();
+            weight=parseFloat(weight);
+			
+            // If the field was left blank, display an error in the spane
+			// with ID firstNameError and flip the flag to false
+			if (isNaN(weight))
+			{
+				$("#weightError").text("Enter a number");
+				isValid = false;    
+			} else if (weight<=0)
+            {
+                $("#weightError").text("Enter valid weight");
+                isValid=false;
+
+            }
+
+            
+
+            /*
+				HEIGHT VALIDATION
+			*/
+			
+			// Get the height value from the text box with ID height
+			
+			var height = $("#height").val();
+			
+			height = parseFloat(height);
+
+            // If the value was NaN, or was outside the acceptable range,
+			// display an error in the span with ID gradeError and flip
+			// the flag to false
+
+			if ( isNaN(height) )
+			{
+				$("#heightError").text("Enter a number");
+				isValid = false;
+			} else if (height< 50)
+			{
+				$("#heightError").text("Must be more than 50");
+				isValid = false;
+			} else if (height >100)
+			{
+				$("#heightError").text("Must be less than 100");
+				isValid = false;
+			}
+			
+            
+
+			
+			/*
+				PROGRAM LOGIC
+			*/
+			
+            // If the entire form was valid...
+
+			// Change the HTML of the <p> with ID of "message" to
+			// state, for example, "You have registered Jane for grade 6 camp!"
+			// Use the name and grade the user provided.
+
+			if (isValid)
+
+			{
+                
+                var bmi=(weight/(height*height))*703;
+                bmi=parseFloat(bmi);
+                var message;
+                if (bmi>30)
+                {
+                    message = "Your BMI is  " + bmi.toFixed(2) +" you are obese";
+                } else if (bmi > 25)
+                {
+                    message = "Your BMI is  " + bmi.toFixed(2) +" you are overweight";
+                } else if (bmi<20)
+                {
+                    message = "Your BMI is  " + bmi.toFixed(2) +" you are   underweight";
+
+                }else 
+                  message="Your BMI is " + bmi.toFixed(2)+" you are normalweight "
+				$("#message").text(message);
+
+			}
+
+
+            
+			// This prevents the form from submitting to a server
+            return false;
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>Welcome to BMI Calculator.</h1>
+    <fieldset>
+        <legend>Enter your Information</legend>
+        <form id="theForm">
+            <p>
+                <label for="weight">Weight  in pounds(Required)</label>
+                <input id="weight" name="weight" type="number" />
+                <span class="error" id="weightError"></span>
+            </p>
+            <p>
+                <label for="height">Height in inches(Required) </label>
+                <input name="height" id="height" type="number" />
+                <span class="error" id="heightError"></span>
+            </p>
+            <input type="submit" id="submitButton" value=" Calculate BMI" />
+        </form>
+    </fieldset>
+    <p id="message"></p>
+</body>
+
+</html>
